@@ -8,7 +8,7 @@ const request = require('request-promise');
 const SITE = 'https://tia.officialbuyersguide.net';
 
 exports.getData = functions.https.onRequest(async (req, res) => {
-  const { rad, rad2, rad3, cid } = req.query;
+  const { rad = 5, rad2 = 'km', rad3 = '', cid = 1 } = req.query;
   const result = await request({
     uri: `${SITE}/SearchResult.asp?rad=${rad}&rad2=${rad2}&rad3=${rad3}&cid=${cid}`,
     method: 'GET',
@@ -19,7 +19,7 @@ exports.getData = functions.https.onRequest(async (req, res) => {
     const listingNode = page(listing).first().first().first();
     const companySectionNode = listingNode.find('#companyname');
     const companyNode = companySectionNode.children().first();
-    const companyURI = ''; //`${SITE}/${companyNode.attr('href')}`;
+    const companyURI = `${SITE}/${companyNode.attr('href')}`;
     const companyName = companyNode.text();
     const ownerNode = companySectionNode.next();
     const owner = ownerNode.text();
