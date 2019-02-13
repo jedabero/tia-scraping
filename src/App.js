@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { parse } from 'json2csv';
 
 import { GET_DATA_URI } from './env';
 import { radOptions, rad2Options, cidOptions } from "./constants";
@@ -35,7 +36,26 @@ class App extends Component {
   handleChange = ({ target: { name, value } }) => this.setState({ [name]: value });
 
   handleDownload = () => {
-
+    const { listings } = this.state;
+    const fields = [
+      { value: 'companyName', label: 'Company' },
+      { value: 'owner', label: 'Owner' },
+      { value: 'address', label: 'Address' },
+      { value: 'website', label: 'website' },
+      { value: 'phone', label: 'Phone' },
+      { value: 'fax', label: 'Fax' },
+      { value: 'poBox', label: 'P.O. Box' },
+      { value: 'email', label: 'Email' },
+      { value: 'distance', label: 'Distance' },
+    ];
+    const data = parse(listings, { fields });
+    const dataStr = "data:text/csv;charset=utf-8," + encodeURIComponent(data);
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute('href', dataStr);
+    downloadAnchorNode.setAttribute('download', `listings_${Date.now()}.csv`);
+    document.body.appendChild(downloadAnchorNode); // required for firefox
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
   };
 
   render() {
@@ -60,6 +80,7 @@ class App extends Component {
           </select>
           <button type="submit" className="btn btn-primary my-1">Search</button>
           {loading && <div className="alert alert-info py-1 my-1 mx-2" role="alert">Searching</div>}
+          {listings.length > 0 && <button type="button" className="btn btn-primary my-1 ml-2" onClick={this.handleDownload}>Download CSV</button>}
         </form>
         <div className="table-responsive">
           <table className="table table-sm table-striped table-hover ">
