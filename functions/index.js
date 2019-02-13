@@ -7,11 +7,20 @@ const request = require('request-promise');
 
 const SITE = 'https://tia.officialbuyersguide.net';
 
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:5000', 'https://tia-scraping.firebaseapp.com']
+
 exports.getData = functions.https.onRequest(async (req, res) => {
+  const origin = req.get('origin');
+  if (allowedOrigins.includes(origin)) {
+    res.set('Access-Control-Allow-Origin', origin);
+  } else {
+    res.set('Access-Control-Allow-Origin', allowedOrigins[2]);
+  }
   const { rad = 5, rad2 = 'km', rad3 = '', cid = 1 } = req.query;
   const result = await request({
     uri: `${SITE}/SearchResult.asp?rad=${rad}&rad2=${rad2}&rad3=${rad3}&cid=${cid}`,
     method: 'GET',
+    family: 4,
   });
   const page = cheerio.load(result);
   const listings = [];
