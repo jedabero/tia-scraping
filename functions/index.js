@@ -66,5 +66,5 @@ exports.getData = functions.https.onRequest(async (req, res) => {
 
   } while (nextPageURI);
 
-  res.json({ length: listings.length, listings });
+  res.json(listings);
 });

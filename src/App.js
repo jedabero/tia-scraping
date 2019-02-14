@@ -79,37 +79,29 @@ class App extends Component {
             {cidOptions.map(({ value, text }) => <option key={value} value={value}>{text}</option>)}
           </select>
           <button type="submit" className="btn btn-primary my-1">Search</button>
-          {loading && <div className="alert alert-info py-1 my-1 mx-2" role="alert">Searching</div>}
+          <div className="alert alert-info py-1 my-1 mx-2" role="alert">{loading ? 'Searching' : listings.length + ' listings'}</div>
           {listings.length > 0 && <button type="button" className="btn btn-primary my-1 ml-2" onClick={this.handleDownload}>Download CSV</button>}
         </form>
-        <div className="table-responsive">
-          <table className="table table-sm table-striped table-hover ">
-            <caption>{listings.length < 1 ? `Sorry. No listings were found matching your search.` : ''}</caption>
-            <thead>
-              <tr>
-                <th scope="col">Company</th>
-                <th scope="col">Owner</th>
-                <th scope="col">Address</th>
-                <th scope="col">Website</th>
-                <th scope="col">Phone</th>
-                <th scope="col">Email</th>
-                <th scope="col">Distance</th>
-              </tr>
-            </thead>
-            <tbody>
-              {listings.map((listing, i) => (
-                <tr key={i}>
-                  <td><a href={listing.companyURI}>{listing.companyName}</a></td>
-                  <td>{listing.owner}</td>
-                  <td>{listing.address}</td>
-                  <td>{listing.website}</td>
-                  <td>{listing.phone}</td>
-                  <td>{listing.email}</td>
-                  <td>{listing.distance}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="card-columns p-3">
+          {listings.map((listing, i) => (
+            <div key={i} className="card">
+              <div className="card-body">
+                <h5 className="card-title">
+                  <a href={listing.companyURI}>{listing.companyName}</a>
+                </h5>
+                <p className="card-text">{listing.owner}</p>
+                {listing.poBox && <p className="card-text">{listing.poBox}</p>}
+                <p className="card-text">{listing.address}</p>
+                <p className="card-text">{listing.website}</p>
+                <p className="card-text">Phone: {listing.phone}</p>
+                {listing.fax && <p className="card-text">{listing.fax}</p>}
+                <p className="card-text">{listing.email}</p>
+              </div>
+              <div className="card-footer">
+                <small className="card-muted">{listing.distance}</small>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );
