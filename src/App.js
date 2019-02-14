@@ -62,7 +62,7 @@ class App extends Component {
     const { rad, rad2, rad3, cid, listings, loading } = this.state;
     return (
       <div className="App">
-        <form className="form-inline" onSubmit={this.handleSubmit}>
+        <form className="form-inline px-3 pt-3" onSubmit={this.handleSubmit}>
           <label className="my-1 mr-2" htmlFor="rad">Search for:&nbsp;</label>
           <select className="form-control my-1 mr-sm-2" name="rad" value={rad} onChange={this.handleChange}>
             {radOptions.map(option => <option key={option} value={option}>{option}</option>)}
@@ -78,7 +78,7 @@ class App extends Component {
             <option value="">Select a Category...</option>
             {cidOptions.map(({ value, text }) => <option key={value} value={value}>{text}</option>)}
           </select>
-          <button type="submit" className="btn btn-primary my-1">Search</button>
+          <button type="submit" disabled={!rad3 || !cid} className="btn btn-primary my-1">Search</button>
           <div className="alert alert-info py-1 my-1 mx-2" role="alert">{loading ? 'Searching' : listings.length + ' listings'}</div>
           {listings.length > 0 && <button type="button" className="btn btn-primary my-1 ml-2" onClick={this.handleDownload}>Download CSV</button>}
         </form>
