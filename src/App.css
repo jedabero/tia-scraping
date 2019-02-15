@@ -31,21 +31,3 @@
     transform: rotate(360deg);
   }
 }
-
-@media (min-width: 900px) {
-  .card-columns {
-    column-count: 4;
-  }
-}
-
-@media (min-width: 1280px) {
-  .card-columns {
-    column-count: 5;
-  }
-}
-
-@media (min-width: 1920px) {
-  .card-columns {
-    column-count: 6;
-  }
-}
